@@ -16,3 +16,5 @@ LangChain Framework: Employed to secure private data, the LangChain framework ad
 SQLAlchemy and PostgreSQL Database: The integration of SQLAlchemy facilitates operations with a PostgreSQL database, enabling the storage, retrieval, and management of user interactions and AI chat records.
 
 The exploration in this post aims to provide developers with insights into the intricate interplay between GPT APIs, rule databases, and data processing—leading to the creation of an intelligent AI chatbot tailored for industry-specific inquiries.
+
+Review my article at the following link: https://medium.com/@datalev/building-an-intelligent-credit-card-chatbot-with-openai-api-4413eaed5e8e
