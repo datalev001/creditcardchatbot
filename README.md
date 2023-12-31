@@ -1,4 +1,4 @@
-# Building an Intelligent Credit Card Chatbot with OpenAI's GPT API
+# Building an Intelligent Credit Card Chatbot with OpenAI API
 Exploring the Integration of GPT APIs, Azure, Rule Databases, LangChain and Data Processing for Industry-Specific AI Chatbots
 
 The utilization of powerful language models such as GPT (Generative Pre-trained Transformer) and its associated APIs has opened up exciting possibilities for creating intelligent chatbots. Particularly, OpenAI's GPT API serves as a robust tool for developing conversational agents that can navigate industry-specific queries with remarkable proficiency.
