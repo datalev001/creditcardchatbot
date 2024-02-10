@@ -12,7 +12,9 @@ Privacy Protection: Addressing the concern of data privacy, the AI chatbot emplo
 The technological framework for this chatbot includes:
 Python Flask Back-End: A back-end service that utilizes Python Flask code for data processing, coupled with HTML and Javascript for creating an interactive front-end dialogue page.
 GPT API Integration: Specifically, the use of the ChatCompletion module of the GPT API to access the credit card rule library, generating answers to user queries.
-LangChain Framework: Employed to secure private data, the LangChain framework adds an extra layer of privacy protection to the conversation.
+LangChain Framework: Employed to secure private data, the LangChain framework adds an extra layer of privacy protection to the conversation. 
+
+Most recent update: chatbot_code_001update.py, chat.html
 SQLAlchemy and PostgreSQL Database: The integration of SQLAlchemy facilitates operations with a PostgreSQL database, enabling the storage, retrieval, and management of user interactions and AI chat records.
 
 The exploration in this post aims to provide developers with insights into the intricate interplay between GPT APIs, rule databases, and data processing—leading to the creation of an intelligent AI chatbot tailored for industry-specific inquiries.
