@@ -1,6 +1,9 @@
-# this chatbot Python Flask code is to use GPT API in Azure: no datasources 
+#  This chatbot Python Flask code is to use GPT API in Azure: no datasources 
 #  python chatbot.py
 #  http://127.0.0.1:5000/ (Press CTRL+C to quit)
+#  This is the new version Python Flask based on OpenAI version > 1.0 and 
+#  some update based on the previous Flask code: chatbot_code_001.py
+#  I also update the chat.html 
 
 import os
 from flask import Flask, request, jsonify, render_template
@@ -30,6 +33,7 @@ openai.api_base = "https://*************"
 openai.api_key = "**************"
 deployment_id = "gpt4"
 
+# For OpenAI ver > 1.0
 client = AzureOpenAI0(
   api_key = openai.api_key,  
   api_version = openai.api_version,
@@ -201,6 +205,7 @@ def add_message_to_history(user_id, session_id, message):
     c.execute('INSERT INTO conversation_history VALUES (?, ?, ?)', (user_id, session_id, message))
     conn.commit()
 
+# This is new function for removing the chat history for the first visiting ChatBot
 def reset_history_internal():
     try:
         conn = sqlite3.connect('conversation_history.db')
@@ -212,7 +217,8 @@ def reset_history_internal():
     except Exception as e:
         print(str(e))
         return False
-        
+      
+# This is new function for removing the chat history for the first visiting ChatBot        
 @app.route('/reset_history', methods=['GET'])
 def reset_history():
     if reset_history_internal():
@@ -246,6 +252,8 @@ def query_dialogby():
     except Exception as e:
         return jsonify({'error': str(e)})
 
+# There are some update on this function: 
+# 1) OpenAI API's response 2) arrangement of prompt: message_lst 3) save dialogs into DB  
 @app.route('/send', methods=['POST'])
 def send_message():
     user_message = request.json['message']
