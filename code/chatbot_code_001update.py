@@ -1,6 +1,7 @@
 #  This chatbot Python Flask code is to use GPT API in Azure: no datasources 
-#  python chatbot.py
+#  python chatbot_code_001update.py
 #  http://127.0.0.1:5000/ (Press CTRL+C to quit)
+
 #  This is the new version Python Flask based on OpenAI version > 1.0 and 
 #  some update based on the previous Flask code: chatbot_code_001.py
 #  I also update the chat.html 
@@ -170,20 +171,31 @@ if not inspector.has_table('message_hist'):
 Session = sessionmaker(bind=engine)
 session = Session()
 
+## I updated the following function, as my sqlalchemy version is updated
 def query_dialog_function(start_date, end_date):
+  
     # Convert start_date and end_date strings to datetime objects
     start_datetime = datetime.strptime(start_date, "%Y-%m-%d")
     end_datetime = datetime.strptime(end_date, "%Y-%m-%d")
-
+    
     Session = sessionmaker(bind=engine)
     session = Session()
     query = text(
         "SELECT question, answer FROM message_hist "
         "WHERE timestamp >= :start_datetime AND timestamp <= :end_datetime"
     )
+    
     result = session.execute(query, {"start_datetime": start_datetime, "end_datetime": end_datetime})
-    result_panels = [{"question": row["question"], "answer": row["answer"]} for row in result]
+  
+    # I update code here:   
+    result_panels = []    
+    for row in result:
+        dict_data = {"question": row[0], "answer": row[1]}
+        result_panels.append(dict_data)
+        print(f"Question: {row[0]}, Answer: {row[1]}")    
+        
     session.close()
+
     return result_panels
 
 def get_conversation_history(user_id, session_id):
@@ -221,15 +233,14 @@ def reset_history_internal():
 # This is new function for removing the chat history for the first visiting ChatBot        
 @app.route('/reset_history', methods=['GET'])
 def reset_history():
-    if reset_history_internal():
-        return jsonify({'success': 'Conversation history reset successfully'})
-    else:
-        return jsonify({'error': 'Failed to reset conversation history'})
+    reset_history_flag = reset_history_internal()
+    print (reset_history_flag)
+    return render_template('chat.html')
     
 @app.route('/')
 def chat():
-    if not reset_history_internal():
-        return jsonify({'error': 'Failed to reset conversation history'})
+    reset_history_flag = reset_history_internal()
+    print (reset_history_flag)
     return render_template('chat.html')
     
 @app.route('/dialog_hist')
@@ -243,9 +254,7 @@ def query_dialogby():
 
     if start_date is None or end_date is None:
         return jsonify({'error': 'Missing start_date or end_date parameter'})
-
     try:
-        
         result_panels = query_dialog_function(start_date, end_date)
         
         return jsonify(result_panels)
@@ -314,11 +323,13 @@ def send_message():
     bot_response_final = bot_response_final.strip()
     bot_response_final = bot_response_final.replace('Answer:', "")
 
+    # Chatting based on the context, for coversional history  
     # Save the user's question and bot's answer to the database
     # Add the current user message to the conversation history
     add_message_to_history(user_id, session_id, ' Question from user: ' + user_request)
     add_message_to_history(user_id, session_id, 'Answer from assistant: ' + bot_response_final)
-
+  
+    # Save the dialogs to update knowledge base in the future
     dialog_table_entry = {'question': user_message, 'answer': bot_response_final}
     session.execute(dialog_table.insert().values(dialog_table_entry))
     session.commit()
