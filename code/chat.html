@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>CGI Help Desk Chatbot</title>
+    
+    <script>
+        window.addEventListener("beforeunload", function(event) {
+            navigator.sendBeacon('/reset_history');
+        });
+    </script>
+    
     <style>
         body {
             background-color: hsl(0, 0%, 99%);
